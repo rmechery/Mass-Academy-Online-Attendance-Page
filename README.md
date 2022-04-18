@@ -3,3 +3,6 @@
 
 # Please Note
 This tool was only designed for students and faculty of Mass Academy and as such user credentials for login will not be made public as of now.
+
+# Presentation
+View a summary of the presentation at ![presentation.png](presentation.png "presentation.png")
