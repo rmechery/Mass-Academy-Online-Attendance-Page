@@ -1,0 +1,95 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="18000">
+  <!--Page will refresh every 5 hours (18000s)-->
+  <link rel="shortcut icon" type="image/jpg" href="images/mass_academy_logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAMS Attendance</title>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+  <script type="module" src="script2.js"></script>
+  <link rel="stylesheet" href="main.css">
+
+  <!-- Jquery and Popper.js-->
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script> -->
+
+  <!--BootstrapCDN (Sass + JS)-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+    <!-- Script for getting public IP address-->
+    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-secondary mb-1 justify-content-between" style="align-items: center;">
+    <div>
+      <a class="navbar-brand text-xl-left align-middle" href="#" onclick="window.location.reload(true);">
+        <img class="d-inline-block align-middle mr-1" src="images/mass_academy_logo.png" width="50" height="40"
+          alt="This is the logo" style="text-align: center;">
+        <h2 class="d-inline-block align-middle">MAMS Attendance</h2>
+      </a>
+    </div>
+
+    <form class="form-inline">
+      <button type="button" id="dark-mode-button" class="m-1 btn btn-dark"
+        style="width: 7em !important; height: 3em !important; ">Dark Mode</button>
+      <button type="button" id="sign-out-button" class="m-1 btn btn-primary"
+        style="width: 7em !important; height: 3em !important;">Sign Out</button>
+    </form>
+  </nav>
+
+  <div id="scrollingAnnouncement">
+    <h2 id ="notifications" class="text-center">There are no announcements.</h2>
+  </div>
+
+  
+  <section id="check-in-section" class="container mt-4">
+    <h2>Directions</h2>
+    <p>Just click the buttons below when you want to sign in/out of MAMS.</p>
+    <p>If you notice any bugs or glitches, please contact me at <a href="mailto:rmechery@wpi.edu">rmechery@wpi.edu</a>.</p>  
+  </div>
+   
+    <h2>Attendance</h2>
+    <button id="check-in-button" class="btn btn-success disabled">Check In</button>
+    <button id="check-out-button" class="btn btn-danger disabled">Check Out</button>
+  </section>
+
+
+  <!-- Modal For Anything -->
+  <div class="modal fade text-dark" id="randomModal" tabindex="-1" role="dialog" aria-labelledby="randomModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="randomModalHeader">
+            <!--Random Modal Header Goes here-->
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="randomModalText">
+          <!--Random Modal text Goes Here-->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

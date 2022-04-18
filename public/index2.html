@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="18000"> <!--Page will refresh every 5 hours (18000s)-->
+  <link rel="shortcut icon" type="image/jpg" href="images/mass_academy_logo.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAMS Attendance</title>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-database.js"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import {initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from  "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+    import { getDatabase, ref, set} from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoESPy-Wp8dUpTuPLuR2iwNotXIOg5vHM",
+      authDomain: "hello-world-a8cba.firebaseapp.com",
+      projectId: "hello-world-a8cba",
+      storageBucket: "hello-world-a8cba.appspot.com",
+      messagingSenderId: "9854576099",
+      appId: "1:9854576099:web:7d0adde9f238a84466acd6",
+      databaseURL: "hello-world-a8cba.firebaseio.com"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    
+  </script>
+
+  <script src="app.js" defer></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"
+    integrity="sha512-/seDHxVfh1NvFUscAj8GsHQVZJvr2jjAoYsNL7As2FCaFHUHYIarl3sRCvVlFgyouVNiRgHIebyLKjpgd1SLDw=="
+    crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-secondary mb-3 justify-content-between" style="align-items: center;">
+    <div>
+      <a class="navbar-brand text-xl-left align-middle" href="#" onclick="window.location.reload(true);">
+        <img class="d-inline-block align-middle mr-1" src="images/mass_academy_logo.png" width="66" height="56" alt="This is the logo" style="text-align: center;">
+        <h2 class="d-inline-block align-middle" style="font-size: 1.5em;">Mass Academy Attendance Form</h2>
+      </a>
+    </div>
+   
+    <form class="form-inline">
+      <button type="button" id="dark-mode-button" class="m-3 btn btn-dark" onmousedown="darkMode()" style="width: 7em !important; height: 4em !important; ">Dark Mode</button>
+    </form>
+  </nav>
+
+  <div id="date"><h2 class="text-sm-center"></h2></div>
+
+  <section id="whenSignedOut" class="container">
+    <form method="post" class="container">
+      <div class="form-group">
+      <label for="username">Email:</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="Enter your WPI email." required ><br>
+      </div>
+      <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" id="password" name="password" autocomplete="off" required>
+     </div>
+      <input type="button" class="btn btn-primary" onclick="credentials()" value="Sign In">
+      <div id="form-fail-message"></div>
+    </form>
+  </section>
+
+  <section id="whenSignedIn" hidden="true" class="container">
+    
+    <div id="userDetails"></div>
+      <button id="signOutBtn" class="btn btn-primary" onclick="firebase.auth().signOut()">Sign Out</button>
+      <input type="button" class="btn btn-info" onclick="document.getElementById('profile-container').hidden=false;" value="Set Profile">
+      <input type="button" class="btn btn-warning" onclick="document.getElementById('reset-password-container').hidden=false;" value="Reset Password">
+    </section>
+
+    <section class="container" id="profile-container" hidden="true">
+      <button type="button" class="btn-close float-md-right" aria-label="Close" id="profile-close" onclick="document.getElementById('profile-container').hidden=true;"></button>
+      <form method="post" id="profile-form">
+        <div class="form-group">
+        <br><label for="username">Profile Name:</label>
+        <input type="text" class="form-control d-inline-block" id="profile-name" name="profile-name" placeholder="Enter the display name you want. Ex. John Doe" required ><br>
+        </div>
+        <input type="button" class="btn btn-primary" onclick="setProfile()" value="Submit">
+      </form>
+    </section>
+
+    <section class="container mt-2 pb-2" id="reset-password-container" hidden="true">
+      <form method="post" id="reset-password-form" class="container">
+        <div class="form-group">
+          <button type="button" class="btn-close float-md-right" aria-label="Close" id="reset-password-close" onclick="document.getElementById('reset-password-container').hidden=true;"></button>
+          <br><label for="username">New Password</label>
+          <input type="password" class="form-control d-inline-block" id="reset-password" name="reset-password" placeholder="Enter your new password." autocomplete="off" required>
+          <input type="button" class="btn btn-primary" onclick="updatePassword()" value="Submit">
+          <p id="reset-password-message"></p>
+        </div>
+      </form>
+    </section>
+  
+  </section>
+
+  <section id="check-in-section" hidden="true"  class="container mt-2">
+    <h2>Attendance</h2>
+    <button id="check-in-button" class="btn btn-success disabled" onclick="checkInButton()">Check In</button>
+    <button id="check-out-button" class="btn btn-danger disabled">Check Out</button>
+  </section>
+
+</body>
+
+</html>
